@@ -36,4 +36,3 @@ Route::middleware('auth')->group(function () {
 Route::get('/', [ProductController::class, 'index'])->name('index');
 Route::get('/home', [ProductController::class, 'index'])->name('home');
 Route::get('/view/{id}', [CategoryController::class,'categories']);
-
