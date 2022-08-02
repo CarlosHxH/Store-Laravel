@@ -9,6 +9,17 @@ use Yajra\DataTables\Facades\DataTables as FacadesDataTables;
 
 class CategoryController extends Controller
 {
+
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -30,12 +41,6 @@ class CategoryController extends Controller
                 ->make(true);
         }
         return view('category.index');
-    }
-
-    public function categories($id){
-        $product = Category::with(['product'])->where('id', '=', $id)->paginate(9, array('*'), 'p');
-        $category = Category::paginate(5, array('*'), 'c');
-        return view('product.index',compact('product','category'));
     }
 
 

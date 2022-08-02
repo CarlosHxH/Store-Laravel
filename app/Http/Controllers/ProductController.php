@@ -9,6 +9,17 @@ use Illuminate\Contracts\Filesystem\FileNotFoundException;
 
 class ProductController extends Controller
 {
+
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -80,8 +91,8 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        $prod = Product::all();
-        return json_encode($prod);
+        //$prod = Product::all();
+        //return json_encode($prod);
     }
 
     /**

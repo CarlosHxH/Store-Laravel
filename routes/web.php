@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\HomeController;
 use PHPUnit\TextUI\XmlConfiguration\Group;
 use PHPUnit\TextUI\XmlConfiguration\Groups;
 
@@ -20,19 +21,10 @@ use PHPUnit\TextUI\XmlConfiguration\Groups;
 */
 
 Auth::routes();
-Route::middleware('auth')->group(function () {
 
-    Route::middleware('Check')->group(function () {
-      // Rotas que só o admin pode acessar
-    });
-    Route::middleware('admin')->group(function(){
+Route::get('/', [HomeController::class, 'index'])->name('index');
+Route::get('/home', [HomeController::class, 'index'])->name('home');
+Route::get('/view/{id}', [HomeController::class,'category'])->name('category');
 
-    });
-
-    Route::resource('category', CategoryController::class);
-    Route::resource('product', ProductController::class);
-});
-
-Route::get('/', [ProductController::class, 'index'])->name('index');
-Route::get('/home', [ProductController::class, 'index'])->name('home');
-Route::get('/view/{id}', [CategoryController::class,'categories']);
+Route::resource('category', CategoryController::class);
+Route::resource('product', ProductController::class);

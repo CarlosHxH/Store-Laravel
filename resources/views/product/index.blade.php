@@ -180,7 +180,7 @@
                                         <h3 class="title"><a href="{{$prod->id}}">{{$prod->name}}</a></h3>
                                         <div class="price">
                                             R$ {{$prod->price}}
-                                            <span>{{$prod->category->name}}</span>
+                                            <span></span>
                                         </div>
                                         <ul class="rating">
                                             <li class="fa fa-star {{$prod->star <= 0?'disable':'';}}"></li>

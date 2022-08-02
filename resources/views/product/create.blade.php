@@ -14,15 +14,14 @@
                             <form id="file_form" class="form-signin" method="post" enctype="multipart/form-data">
 
                                 <div class="form-inline form-control form-label-group">
-                                    <input id="files" type="file" class="" name="files[]" hidden
-                                        multiple="">
+                                    <input id="files" type="file" class="" name="files" hidden>
                                     <label id="video_image_label" for="files"
                                         class="form-control"><i class="fas fa-image"></i> Select Image </label>
                                 </div>
 
                                 <section class="file-area mt-3 mb-1">
                                     <div class="content">
-                                        <div class="row scroll-x">
+                                        <div class="row">
                                             <div class="col-lg-12 text-center">
                                                 <ul class="image-list mb-1"></ul>
                                             </div>
@@ -96,6 +95,7 @@
                         filesLength = files.length;
                     for (var i = 0; i < filesLength; i++) {
                         var f = files[i]
+                        selected_files.splice(i, 1);
                         selected_files.push(f)
                         var fileReader = new FileReader();
                         fileReader.fileName = f.name;
@@ -107,7 +107,7 @@
                                         "<i class='far fa-trash-alt'></i>"+
                                     "</span>" +
                                 "</li>");
-                            image_list.append(single_image);
+                            image_list.html(single_image);
                         });
                         fileReader.readAsDataURL(f);
                     }
