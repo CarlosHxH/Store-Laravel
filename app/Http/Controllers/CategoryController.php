@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Datatables;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables as FacadesDataTables;

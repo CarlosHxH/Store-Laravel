@@ -11,21 +11,21 @@
         </div>
         <div class="carousel-inner">
             <div class="carousel-item active">
-                <img src="https://thumbs.dreamstime.com/b/javascript-gold-text-black-background-d-rendered-royalty-free-stock-picture-image-can-be-used-online-website-banner-87916218.jpg" class="d-block w-100" alt="https://thumbs.dreamstime.com/b/javascript-gold-text-black-background-d-rendered-royalty-free-stock-picture-image-can-be-used-online-website-banner-87916218.jpg">
+                <img src="{{asset('banners/banner-1.png')}}" class="d-block w-100" alt="">
                 <div class="carousel-caption d-none d-md-block">
                     <h5>First slide label</h5>
                     <p>Some representative placeholder content for the first slide.</p>
                 </div>
             </div>
             <div class="carousel-item">
-                <img src="https://thumbs.dreamstime.com/b/javascript-gold-text-black-background-d-rendered-royalty-free-stock-picture-image-can-be-used-online-website-banner-87918523.jpg" class="d-block w-100" alt="https://thumbs.dreamstime.com/b/javascript-gold-text-black-background-d-rendered-royalty-free-stock-picture-image-can-be-used-online-website-banner-87916218.jpg">
+                <img src="{{asset('banners/banner-2.png')}}" class="d-block w-100" alt="">
                 <div class="carousel-caption d-none d-md-block">
                     <h5>Second slide label</h5>
                     <p>Some representative placeholder content for the second slide.</p>
                 </div>
             </div>
             <div class="carousel-item">
-                <img src="https://thumbs.dreamstime.com/b/javascript-fluorescent-neon-tube-sign-brickwork-front-view-d-rendered-royalty-free-stock-picture-can-be-used-online-banner-86488586.jpg" class="d-block w-100" alt="https://thumbs.dreamstime.com/b/javascript-gold-text-black-background-d-rendered-royalty-free-stock-picture-image-can-be-used-online-website-banner-87916218.jpg">
+                <img src="{{asset('banners/banner-3.png')}}" class="d-block w-100" alt="">
                 <div class="carousel-caption d-none d-md-block">
                     <h5>Third slide label</h5>
                     <p>Some representative placeholder content for the third slide.</p>

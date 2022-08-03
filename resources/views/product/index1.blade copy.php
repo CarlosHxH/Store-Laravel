@@ -69,6 +69,23 @@
                         <p class="text text-center">{{ $category->links('layouts.paginate') }}</p>
                     </ul>
                 </div>
+
+                <!--div class="card bg-light mb-3">
+                    <div class="card-header bg-success text-white text-uppercase">Last product</div>
+                    <div class="card-body">
+                        <img class="img-fluid"
+                            src="https://statics.angeloni.com.br/super/files/produtos/731285/731285_1_zoom.jpg">
+                        <h5 class="card-title text-muted">Product title</h5>
+                        <p class="card-text text-muted">R$ 21,99</p>
+                    </div>
+                    <ul class="rating">
+                        <li class="fa fa-star"></li>
+                        <li class="fa fa-star"></li>
+                        <li class="fa fa-star"></li>
+                        <li class="fa fa-star"></li>
+                        <li class="fa fa-star disable"></li>
+                    </ul>
+                </div-->
             </div>
 
             <div id="products" class="col">
@@ -77,6 +94,44 @@
                     <div class="d-flex justify-content-end">
                         <div class="mt-3">{{ $product->links('pagination::bootstrap-4') }}</div>
                     </div>
+
+
+                    @if (Request::is('view/*'))
+                    @foreach ($product as $key)
+                        @foreach ($key->product as $prod)
+                            <div class="col-md-4 col-sm-6 mb-2">
+                                <div class="product-grid border border-light border-2 p-2">
+                                    <div class="product-image3">
+                                        <a href="#">
+                                            <img class="pic" src="{{$prod->file}}">
+                                        </a>
+                                        <ul class="social">
+                                            <li><a href="#"><i class="fa fa-heart"></i></a></li>
+                                            <li><a href="#"><i class="fa fa-eye"></i></a></li>
+                                            <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
+                                        </ul>
+                                        <span class="product-new-label">New</span>
+                                    </div>
+                                    <div class="product-content">
+                                        <h3 class="title"><a href="{{$prod->id}}">{{$prod->name}}</a></h3>
+                                        <div class="price">
+                                            R$ {{$prod->price}}
+                                            <span></span>
+                                        </div>
+                                        <ul class="rating">
+                                            <li class="fa fa-star {{$prod->star <= 0?'disable':'';}}"></li>
+                                            <li class="fa fa-star {{$prod->star <= 1?'disable':'';}}"></li>
+                                            <li class="fa fa-star {{$prod->star <= 2?'disable':'';}}"></li>
+                                            <li class="fa fa-star {{$prod->star <= 3?'disable':'';}}"></li>
+                                            <li class="fa fa-star {{$prod->star <= 4?'disable':'';}}"></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    @endforeach
+
+                    @else
 
                     @foreach ($product as $prod)
                         <div class="col-md-4 col-sm-6 mb-2">
@@ -108,8 +163,8 @@
                                 </div>
                             </div>
                         </div>
-                    @endforeach
-
+                    @endforeach'
+                    @endif
                     <div class="d-flex justify-content-end">
                         <div class="mt-3">{{ $product->links('pagination::bootstrap-4') }}</div>
                     </div>

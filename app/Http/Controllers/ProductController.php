@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use Yajra\DataTables\Facades\DataTables as FacadesDataTables;
 
 class ProductController extends Controller
 {
@@ -27,9 +28,20 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $product = Product::with(["category"])->paginate(9, array('*'), 'p');
-        $category = Category::paginate(5, array('*'), 'c');
-        return view('product.index',compact('product','category'));
+        if (request()->ajax()) {
+            return FacadesDataTables::of(Product::all())
+                ->addIndexColumn()
+                ->addColumn('action', function ($row) {
+                    $action = "
+                        <a href='/product/$row->id' class='btn btn-outline-success btn-sm mx-2 btn-edt'><i class='fa fa-pencil'></i></a>
+                        <button data-id='$row->id' class='btn btn-outline-danger btn-sm btn-del'><i class='fa fa-trash'></i></button>
+                    ";
+                    return $action;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        }
+        return view('product.list');
     }
 
     /**
@@ -89,10 +101,11 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function show(Product $product)
+    public function show($id)
     {
-        //$prod = Product::all();
-        //return json_encode($prod);
+        $product = Product::find($id);
+        return json_encode($product);
+        //return view('product.create',compact('product,category'));
     }
 
     /**
@@ -101,9 +114,9 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function edit(Product $product)
+    public function edit($id)
     {
-        return json_encode(Product::find($product->id));
+        //
     }
 
     /**
@@ -126,6 +139,6 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        return json_encode(Category::find($id)->delete($id));
+        return json_encode(Product::find($id)->delete($id));
     }
 }

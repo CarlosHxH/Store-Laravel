@@ -17,12 +17,13 @@
             </div>
             <!-- LIST -->
             <div class=col-md-12>
-                <legend>List of clients</legend>
-                <table id="myTable" class="table table-striped table-bordered table-condensed table-hover"
-                    style="width:100%">
+                <legend>Produtos</legend>
+                <table id="myTable" class="table table-striped table-bordered table-condensed table-hover" style="width:100%">
                     <thead>
                         <tr>
-                            <th>Name</th>
+                            <th>Produto</th>
+                            <th>Preço</th>
+                            <th>Estoque</th>
                             <th width="112px">Actions</th>
                         </tr>
                     </thead>
@@ -30,33 +31,6 @@
             </div>
         </div>
     </div>
-
-
-
-    <div id="modal-cat" class="modal" tabindex="-1">
-        <!--div class="modal fade" id="modal-cat" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-                            aria-labelledby="modal-cat" aria-hidden="true"-->
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="cat-title">Adicionar</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true"></span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <input type="hidden" id="cat-id">
-                    <label for="name">Categoria</label>
-                    <input type="text" id="cat-name" class="form-control">
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
-                    <button id="submit" class="btn btn-success">Salvar</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
 
 
     <div id="modal-delete" class="modal" tabindex="-1">
@@ -89,16 +63,18 @@
             $('#myTable').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: "{{ url('category') }}",
+                ajax: "{{ url('product') }}",
                 columns: [
                     {data: 'name',name: 'name'},
+                    {data: 'price',name: 'price'},
+                    {data: 'stock',name: 'stock'},
                     {data: 'action',name: 'action',orderable: false},
                 ],
                 order: [[0, 'desc']]
             });
 
             $("#myTable_filter label").addClass('mx-5');
-            $('#myTable_filter').append(`<label class="m-auto"><button id="new" class="btn btn-outline-primary px-5" data-bs-toggle="modal" data-bs-target="#modal-cat">new</button></label>`);
+            $('#myTable_filter').append(`<label class="m-auto"><a href="{{route('product.create')}}" class="btn btn-outline-primary px-5">new</a></label>`);
 
             $(document).on("click", ".btn-del", function() {
                 $("#del").data('id', $(this).data('id'));
@@ -108,47 +84,9 @@
                 let id = $(this).data('id');
                 $.ajax({
                     type: "DELETE",
-                    url: "category/"+id,
+                    url: "product/"+id,
                     dataType: 'json',
                     success: function(res) {
-                        var table = $('#myTable').dataTable();
-                        table.fnDraw(false);
-                    }
-                });
-            });
-
-            $(document).on('click','#new',function() {
-                $('#cat-title').html("Adicionar");
-                $('#cat-id').data('id','');
-                $('#cat-name').val('');
-                $('#modal-cat').modal('show');
-            });
-
-            $(document).on('click','.btn-edt',function() {
-                let id = $(this).data('id');
-                $.ajax({
-                    type: "GET",
-                    url: "category/"+id+"/edit",
-                    dataType: 'json',
-                    success: function(data) {
-                        $('#cat-title').html("Editar Categoria");
-                        $('#cat-id').data('id',data.id);
-                        $('#cat-name').val(data.name);
-                        $('#modal-cat').modal('show');
-                    }
-                });
-            });
-
-            $(document).on('click', '#submit', function() {
-                $.ajax({
-                    type: "POST",
-                    url: "category",
-                    data: {
-                        id: $('#cat-id').data('id'),
-                        product: $("#cat-name").val()
-                    },
-                    success: function(data) {
-                        $("#modal-cat").modal('hide');
                         var table = $('#myTable').dataTable();
                         table.fnDraw(false);
                     }

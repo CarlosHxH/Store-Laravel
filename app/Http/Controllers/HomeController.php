@@ -22,7 +22,7 @@ class HomeController extends Controller
     }
 
     public function category($id){
-        $product = Category::with(['product'])->where('id', '=', $id)->paginate(9, array('*'), 'p');
+        $product = Product::with(['category'])->where('id', $id)->paginate(9, array('*'), 'p');
         $category = Category::paginate(5, array('*'), 'c');
         return view('product.index',compact('product','category'));
     }
