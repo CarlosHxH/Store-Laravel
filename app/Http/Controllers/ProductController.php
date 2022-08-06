@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Yajra\DataTables\Facades\DataTables as FacadesDataTables;
 
@@ -28,9 +29,15 @@ class ProductController extends Controller
      */
     public function index()
     {
+        $products = Product::with(["category"])->paginate(9, array('*'), 'p');
+        $category = Category::paginate(5, array('*'), 'c');
+
         if (request()->ajax()) {
             return FacadesDataTables::of(Product::all())
                 ->addIndexColumn()
+                ->addColumn('file', function ($row) {
+                    return "<img src='$row->file' width='100%'>";
+                })->rawColumns(['file'])
                 ->addColumn('action', function ($row) {
                     $action = "
                         <a href='/product/$row->id' class='btn btn-outline-success btn-sm mx-2 btn-edt'><i class='fa fa-pencil'></i></a>
@@ -38,10 +45,10 @@ class ProductController extends Controller
                     ";
                     return $action;
                 })
-                ->rawColumns(['action'])
+                ->rawColumns(['file','action'])
                 ->make(true);
         }
-        return view('product.list');
+        return view('product.list',compact("products","category"));
     }
 
     /**
@@ -51,8 +58,9 @@ class ProductController extends Controller
      */
     public function create()
     {
-        $category = Category::all();
-        return view('product.create', compact('category'));
+        $product = Product::with(["category"])->paginate(9, array('*'), 'p');
+        $category = Category::paginate(5, array('*'), 'c');
+        return view('product.create', compact('product','category'));
     }
 
     /**
@@ -63,10 +71,17 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request,[
+            'name'=>'required',
+            'description'=>'required',
+            'price'=>'required',
+            'stock'=>'required',
+            'file'=>'required|image|mimes:png,jpg,jpeg|max:10000'
+         ]);
 
-        if ($request->hasFile('all_files')) {
+        if ($request->hasFile('file')) {
             $errors = [];
-            foreach ($request->file('all_files') as $file) {
+            foreach ($request->file('file') as $file) {
                 if(!$file->isValid()) $errors[] = $file;
             }
             if(empty($errors)){
@@ -75,18 +90,22 @@ class ProductController extends Controller
                     $prod->name = $request->name;
                     $prod->price = $request->price;
                     $prod->stock = $request->stock;
-                    $prod->file = $this->encode($request->file('all_files')[0]);
+                    $prod->file = $this->encode($request->file('file'));
                     $prod->category_id = $request->category;
                     $prod->description = $request->description;
-                    $prod->save();
-                    return json_encode($prod);
+                    if(!$prod->save()){
+                        App::abort(500, 'Error');
+                    }
+                    return json_encode(['success'=>true]);
                 } catch (FileNotFoundException $e) {
                     return json_encode(['Error'=>'Imagem invalida!']);
                 }
             }
+            return json_encode(["Error"=>$errors]);
         }
         return json_encode(["Error"=>"Erro ao carregar a imagem!"]);
     }
+
 
     public function encode($path){
         $type = pathinfo($path, PATHINFO_EXTENSION);
